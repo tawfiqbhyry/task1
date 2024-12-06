@@ -12,157 +12,9 @@
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileMenu = document.getElementById('mobileMenu');
-
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-
-            const desktopDropdown = document.getElementById('desktopDropdown');
-            const desktopDropdownMenu = document.getElementById('desktopDropdownMenu');
-
-            desktopDropdown.addEventListener('click', (e) => {
-                e.stopPropagation();
-                desktopDropdownMenu.classList.toggle('hidden');
-            });
-
-            const mobileDropdown = document.getElementById('mobileDropdown');
-            const mobileDropdownMenu = document.getElementById('mobileDropdownMenu');
-
-            mobileDropdown.addEventListener('click', (e) => {
-                e.stopPropagation();
-                mobileDropdownMenu.classList.toggle('hidden');
-            });
-
-            document.addEventListener('click', () => {
-                desktopDropdownMenu.classList.add('hidden');
-                mobileDropdownMenu.classList.add('hidden');
-            });
-
-            window.addEventListener('resize', () => {
-                if (window.innerWidth >= 768) { // md breakpoint
-                    mobileMenu.classList.add('hidden');
-                }
-            });
-            const dialog = document.getElementById("dialog");
-            const openDialogButton = document.getElementById("openDialogButton");
-            const closeDialogButton = document.getElementById("closeDialogButton");
-            const closeDialogButton2 = document.getElementById("closeDialogButton2");
-            const form = document.getElementById("tripForm");
-
-            const tripData = {
-                title: "",
-                description: "",
-                travelers: [],
-            };
-
-            const data = [
-                { name: "Trip A", start: "2024-01-01", end: "2024-01-07", travelling: "5 People", status: "Active", issues: "" },
-                { name: "Trip B", start: "2024-02-10", end: "2024-02-15", travelling: "2 People", status: "Inactive", issues: "1 Issue" },
-            ];
-
-            openDialogButton.addEventListener("click", () => {
-                dialog.classList.remove("hidden");
-            });
-
-            closeDialogButton.addEventListener("click", () => {
-                dialog.classList.add("hidden");
-            });
-
-            closeDialogButton2.addEventListener("click", () => {
-                dialog.classList.add("hidden");
-            });
-
-            form.addEventListener("submit", (e) => {
-                e.preventDefault();
-                dialog.classList.add("hidden");
-                console.log("Trip Data:", tripData);
-            });
-
-            document.getElementById("tripTitle").addEventListener("input", (e) => {
-                tripData.title = e.target.value;
-            });
-
-            document.getElementById("tripDescription").addEventListener("input", (e) => {
-                tripData.description = e.target.value;
-            });
-            let sortConfig = {
-                key: "name",
-                direction: "ascending",
-            };
-
-            const columns = [
-                {
-                    key: "name",
-                    label: "Name",
-                    visible: true,
-                },
-                {
-                    key: "start",
-                    label: "Start Date",
-                    visible: true,
-                    sortable: true,
-                },
-                {
-                    key: "end",
-                    label: "End Date",
-                    visible: true,
-                    sortable: true,
-                },
-                {
-                    key: "travelling",
-                    label: "Travelling",
-                    visible: true,
-                    sortable: true,
-                },
-                {
-                    key: "status",
-                    label: "Status",
-                    visible: true,
-                    sortable: true,
-                },
-                {
-                    key: "issues",
-                    label: "Issues",
-                    visible: true,
-                    sortable: true,
-                },
-
-            ];
-
-            const renderColumns = () => {
-                const columnContainer = document.getElementById("columnContainer");
-                columnContainer.innerHTML = "";
-                columns.forEach(column => {
-                    const button = document.createElement("button");
-                    button.textContent = column.label;
-                    button.className = `px-3 py-1 text-sm font-medium rounded-full border transition ${column.visible ? "bg-blue-100 text-blue-800 border-blue-200" : "bg-gray-100 text-gray-600 border-gray-200"}`;
-                    button.addEventListener("click", () => toggleColumn(column.key));
-                    columnContainer.appendChild(button);
-                });
-            };
-
-            const toggleColumn = (key) => {
-                const column = columns.find(col => col.key === key);
-                if (column) {
-                    column.visible = !column.visible;
-                    renderColumns();
-                }
-            };
-            renderColumns();
-        });
-    </script>
+    <script src="./assets/scripts/main.js" defer></script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
@@ -191,7 +43,7 @@
                         <!-- Logo -->
                         <div class="flex-shrink-0">
                             <div class="w-8 h-8 bg-[#0d9488] rounded-md flex items-center justify-center">
-                                <img src="./assets/react.svg" alt="Logo" class="w-6 h-6">
+                                <img src="./assets/logo.svg" alt="Logo" class="w-6 h-6">
                             </div>
                         </div>
 
@@ -347,60 +199,136 @@
 
                     <!-- Dialog -->
                     <div id="dialog"
-                        class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                        <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
-                            <div class="flex justify-between items-center mb-4">
+                        class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center flex-col text-[#193C3E]">
+                        <div class="bg-gray-50 max-w-3xl w-full rounded-t-lg">
+                            <!-- Header Section -->
+                            <div class="flex justify-between items-center p-4 border-b">
                                 <h2 class="font-bold text-lg">New Trip</h2>
-                                <button id="closeDialogButton" class="text-gray-500 hover:text-gray-800" title="close"
+                                <button id="closeDialogButton" class="text-gray-500 hover:text-gray-800" title="Close"
                                     type="button">
                                     <i class="fas fa-times"></i>
                                 </button>
                             </div>
-                            <form id="tripForm" class="space-y-4">
-                                <!-- Title and Description -->
-                                <div>
-                                    <label for="tripTitle" class="block font-medium">Overview</label>
-                                    <input id="tripTitle" type="text" class="w-full mt-2 p-2 border rounded-md"
-                                        placeholder="Trip to London Zoo and beyond" />
-                                    <textarea id="tripDescription" class="w-full mt-2 p-2 border rounded-md" rows="3"
-                                        placeholder="A big fun day out!"></textarea>
-                                </div>
+                        </div>
 
-                                <!-- Travelers -->
-                                <div>
-                                    <label class="block font-medium">Who is travelling</label>
-                                    <div class="flex flex-wrap gap-2 mt-2">
-                                        <div
-                                            class="bg-green-100 px-3 py-1 rounded-full text-sm flex items-center gap-2">
-                                            Phillip Burn
-                                            <button type="button" class="text-red-500" title="Remove traveler">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                        <div
-                                            class="bg-green-100 px-3 py-1 rounded-full text-sm flex items-center gap-2">
-                                            Tracker Delta
-                                            <button type="button" class="text-red-500" title="Remove traveler">
-                                                <i class="fas fa-times"></i>
-                                            </button>
+                        <!-- Content Section -->
+                        <div class="bg-white rounded-b-lg shadow-lg flex max-w-3xl w-full ">
+                            <!-- Left Section (Overview) -->
+                            <div class="bg-gray-100 w-1/3 p-6 border-r">
+                                <div class="flex text-center items-center content-start bg-white rounded-md px-3 py-2 ">
+                                    <div class="flex items-center justify-center mr-1">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <h2 class="font-bold text-lg">Overview</h2>
+                                </div>
+                            </div>
+
+                            <!-- Right Section (Form) -->
+                            <div class="w-2/3 p-6">
+                                <form id="tripForm" class="space-y-4">
+                                    <!-- Title and Description -->
+                                    <div>
+                                        <label for="tripTitle" class="block font-medium">Title</label>
+                                        <input id="tripTitle" type="text" class="w-full mt-2 p-2 border rounded-md"
+                                            placeholder="Trip to London Zoo and beyond" />
+                                    </div>
+                                    <div>
+                                        <label for="tripDescription" class="block font-medium">Description</label>
+                                        <textarea id="tripDescription" class="w-full mt-2 p-2 border rounded-md"
+                                            rows="3" placeholder="A big fun day out!"></textarea>
+                                    </div>
+
+                                    <!-- Travelers -->
+                                    <div>
+                                        <label class="block font-medium text-gray-800">Who is travelling</label>
+                                        <div class="flex flex-wrap gap-3 mt-3 border-2 p-2 rounded-md">
+                                            <!-- Traveler Chip -->
+                                            <div
+                                                class="bg-gray-100 px-4 py-1.5 rounded-full text-sm flex items-center gap-3 border border-gray-300">
+                                                <span class="text-gray-800 flex items-center gap-2">
+                                                    <i class="fas fa-user text-gray-600"></i>
+                                                    Phillip Burn
+                                                </span>
+                                                <button type="button" class="text-gray-500 hover:text-red-500"
+                                                    title="Remove traveler">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <div
+                                                class="bg-gray-100 px-4 py-1.5 rounded-full text-sm flex items-center gap-3 border border-gray-300">
+                                                <span class="text-gray-800 flex items-center gap-2">
+                                                    <i class="fas fa-signal text-gray-600"></i>
+                                                    Tracker Delta
+                                                </span>
+                                                <button type="button" class="text-gray-500 hover:text-red-500"
+                                                    title="Remove traveler">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <div
+                                                class="bg-gray-100 px-4 py-1.5 rounded-full text-sm flex items-center gap-3 border border-gray-300">
+                                                <span class="text-gray-800 flex items-center gap-2">
+                                                    <i class="fas fa-users text-gray-600"></i>
+                                                    Group Bravo
+                                                </span>
+                                                <button type="button" class="text-gray-500 hover:text-red-500"
+                                                    title="Remove traveler">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <div
+                                                class="bg-gray-100 px-4 py-1.5 rounded-full text-sm flex items-center gap-3 border border-gray-300">
+                                                <span class="text-gray-800 flex items-center gap-2">
+                                                    <i class="fas fa-car text-gray-600"></i>
+                                                    Vehicle Charlie
+                                                </span>
+                                                <button type="button" class="text-gray-500 hover:text-red-500"
+                                                    title="Remove traveler">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <!-- Dropdown to add new travelers -->
+                                            <div class="relative">
+                                                <button type="button"
+                                                    class="bg-gray-200 px-4 py-1.5 text-sm rounded-md hover:bg-gray-300 border border-gray-300 flex items-center gap-2">
+                                                    <i class="fas fa-plus text-gray-600"></i>
+                                                    Add traveler
+                                                </button>
+                                                <!-- Dropdown (hidden by default) -->
+                                                <div
+                                                    class="absolute mt-2 left-0 bg-white shadow-md border border-gray-300 rounded-md hidden">
+                                                    <button
+                                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Traveler
+                                                        1</button>
+                                                    <button
+                                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Traveler
+                                                        2</button>
+                                                    <button
+                                                        class="w-full text-left px-4 py-2 hover:bg-gray-100">Traveler
+                                                        3</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- Actions -->
-                                <div class="flex justify-end gap-2 mt-4">
-                                    <button type="button" id="closeDialogButton2"
-                                        class="px-4 py-2 rounded-md border text-gray-700 hover:bg-gray-100">
-                                        Cancel
-                                    </button>
-                                    <button type="submit"
-                                        class="px-4 py-2 rounded-md bg-[#354952] text-white hover:bg-[#2a3b42]">
-                                        Add a journey
-                                    </button>
-                                </div>
-                            </form>
+
+                                    <!-- Actions -->
+                                    <div class="flex justify-end gap-2 mt-4">
+                                        <button type="button" id="closeDialogButton2"
+                                            class="px-4 py-2 rounded-md border text-gray-700 hover:bg-gray-100">
+                                            Cancel
+                                        </button>
+                                        <button type="submit"
+                                            class="px-4 py-2 rounded-md bg-[#354952] text-white hover:bg-[#2a3b42]">
+                                            Add a journey
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
+
+
 
                     <div class="flex items-center gap-4 p-4 bg-white rounded-lg shadow">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-400" fill="none"
@@ -411,13 +339,13 @@
                         <div id="columnContainer" class="flex flex-wrap gap-2"></div>
                     </div>
 
-                    <div class="bg-white rounded-lg shadow mt-4">
+                    <div class="bg-white rounded-lg shadow mt-4 text-[#839697]">
                         <div class="overflow-x-auto">
                             <table class="w-full">
                                 <thead>
                                     <tr class="bg-slate-50 border-b border-slate-200">
                                         <th
-                                            class="px-4 py-3 text-left text-sm font-medium text-slate-700 cursor-pointer hover:bg-slate-100">
+                                            class="px-4 py-3 text-left text-sm font-medium text-slate-700 cursor-pointer hover:bg-[#D8DFDF]">
                                             <div class="flex items-center gap-2">
                                                 <span>Name</span>
                                                 <div class="flex flex-col">
@@ -479,8 +407,15 @@
                                         <td class="px-4 py-3 text-sm text-slate-600">2024-01-01</td>
                                         <td class="px-4 py-3 text-sm text-slate-600">2024-01-07</td>
                                         <td class="px-4 py-3 text-sm text-slate-600">5 People</td>
-                                        <td class="px-4 py-3 text-sm text-slate-600">Active</td>
-                                        <td class="px-4 py-3 text-sm text-slate-600"></td>
+                                        <td class="px-4 py-3 text-sm text-slate-600">
+                                            <span
+                                                class="inline-block px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+                                                Completed
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-slate-600">
+
+                                        </td>
                                     </tr>
                                     <tr
                                         class="border-b border-slate-100 last:border-none hover:bg-slate-50 cursor-pointer">
@@ -488,8 +423,20 @@
                                         <td class="px-4 py-3 text-sm text-slate-600">2024-02-10</td>
                                         <td class="px-4 py-3 text-sm text-slate-600">2024-02-15</td>
                                         <td class="px-4 py-3 text-sm text-slate-600">2 People</td>
-                                        <td class="px-4 py-3 text-sm text-slate-600">Inactive</td>
-                                        <td class="px-4 py-3 text-sm text-slate-600">1 Issue</td>
+                                        <td class="px-4 py-3 text-sm">
+                                            <span
+                                                class="inline-block px-3 py-1 text-xs font-medium bg-blue-100 rounded-full">
+                                                In progress
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 text-sm text-slate-600">
+
+                                            <span
+                                                class="inline-block px-3 py-1 text-xs font-medium bg-yellow-100 rounded-full border-1 border-gray-400">
+                                                <i class="fas fa-clock text-yellow-500"></i>
+                                                Task OverDue
+                                            </span>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -522,7 +469,6 @@
 
                 </div>
 
-                <!-- Replace the existing Trip Delta section with this code -->
                 <div class="lg:w-96 sm:w-full border-l border-slate-200 bg-white lg:ml-4 sm:mt-8 lg:mt-0">
                     <div class="p-4 border-b border-slate-200 flex justify-between items-center">
                         <h2 class="text-lg font-semibold">Trip Delta</h2>
@@ -532,7 +478,7 @@
                     </div>
 
                     <div class="p-4 flex flex-col">
-                        <p class="text-sm text-slate-600 mb-4">
+                        <p class="text-sm text-[#193C3E] mb-4">
                             Here is the description of the trip, wherever this comes from. It may be optional!
                         </p>
 
@@ -540,7 +486,7 @@
                             <div id="map" class="w-full h-full"></div>
                         </div>
 
-                        <div class="space-y-4 w-full">
+                        <div class="space-y-4 w-full text-[#193C3E]">
                             <div>
                                 <h3 class="font-medium mb-2">Travelling</h3>
                                 <div class="space-y-2">
@@ -598,7 +544,7 @@
                                                 <span class="text-sm">Today, 08:30</span>
                                             </div>
                                             <div class="text-sm text-slate-500">By car</div>
-                                            <div class="text-sm text-slate-500">0 of 2 arrived</div>
+                                            <div class="text-sm text-slate-500">2 of 2 arrived</div>
                                         </div>
                                     </div>
 
@@ -610,12 +556,15 @@
                                             </div>
                                         </div>
                                         <div class="space-y-1">
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex items-center gap-2">
-                                                    <i class="fas fa-users w-4 h-4 text-slate-400"></i>
+                                            <div
+                                                class="flex items-center justify-between bg-yellow-50 rounded-md border-2 border-yellow-300">
+                                                <div
+                                                    class="flex items-center gap-2 px-3 py-2 text-yellow-700 text-center">
+                                                    <i
+                                                        class="fas fa-alarm-clock w-4 h-4 text-yellow-700 text-center"></i>
                                                     <span class="text-sm">Phillip Burn is overdue</span>
                                                 </div>
-                                                <button class="text-slate-400 hover:text-slate-600" title="phili">
+                                                <button class="text-yellow-700 hover:text-slate-600" title="phili">
                                                     <i class="fas fa-ellipsis-v w-4 h-4"></i>
                                                 </button>
                                             </div>
@@ -635,106 +584,6 @@
             </div>
         </main>
     </div>
-
-
-
-    <script>
-        let currentPath = '#remit-alpha-1';
-        const dropdownButton = document.getElementById('dropdownButton');
-        const dropdownContent = document.getElementById('dropdownContent');
-
-        dropdownButton.addEventListener('click', () => {
-            dropdownContent.classList.toggle('show');
-        });
-
-        window.addEventListener('click', (e) => {
-            if (!dropdownButton.contains(e.target)) {
-                dropdownContent.classList.remove('show');
-            }
-        });
-
-        function handleNavigate(path) {
-            currentPath = path;
-            updateActiveStates();
-            dropdownContent.classList.remove('show');
-        }
-
-        function updateActiveStates() {
-            dropdownButton.classList.toggle('active', currentPath.startsWith('#remit-alpha'));
-            document.querySelectorAll('.dropdown-item').forEach(item => {
-                item.classList.toggle('active', item.dataset.path === currentPath);
-            });
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.toggle('active', link.dataset.path === currentPath);
-            });
-        }
-
-        document.querySelectorAll('.dropdown-item, .nav-link').forEach(element => {
-            element.addEventListener('click', () => handleNavigate(element.dataset.path));
-        });
-        updateActiveStates();
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // Table sorting functionality
-            const tableHeaders = document.querySelectorAll('th');
-            let currentSort = {
-                column: null,
-                direction: 'ascending'
-            };
-
-            tableHeaders.forEach((header, index) => {
-                header.addEventListener('click', () => {
-                    const tbody = document.querySelector('tbody');
-                    const rows = Array.from(tbody.querySelectorAll('tr'));
-                    if (currentSort.column === index) {
-                        currentSort.direction = currentSort.direction === 'ascending' ? 'descending' : 'ascending';
-                    } else {
-                        currentSort.column = index;
-                        currentSort.direction = 'ascending';
-                    }
-
-                    tableHeaders.forEach(h => {
-                        const icon = h.querySelector('i');
-                        icon.className = 'fas fa-chevron-up w-4 h-4 text-slate-300';
-                    });
-
-                    const currentIcon = header.querySelector('i');
-                    currentIcon.className = `fas fa-chevron-${currentSort.direction === 'ascending' ? 'up' : 'down'} w-4 h-4`;
-
-                    const sortedRows = rows.sort((a, b) => {
-                        const aVal = a.children[index].textContent;
-                        const bVal = b.children[index].textContent;
-                        return currentSort.direction === 'ascending'
-                            ? aVal.localeCompare(bVal)
-                            : bVal.localeCompare(aVal);
-                    });
-
-                    tbody.innerHTML = '';
-                    sortedRows.forEach(row => tbody.appendChild(row));
-                });
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const map = L.map('map').setView([51.5074, -0.1278], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-
-            const marker = L.marker([51.5074, -0.1278]).addTo(map);
-            marker.bindPopup('A location in London');
-
-            const closeButton = document.querySelector('[title="close"]');
-            if (closeButton) {
-                closeButton.addEventListener('click', function () {
-                    console.log('Close button clicked');
-                });
-            }
-        });
-    </script>
-
-
 </body>
 
 </html>
