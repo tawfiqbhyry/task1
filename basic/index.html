@@ -11,6 +11,13 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
+    <style>
+        #dialog {
+            margin-top: 0;
+            z-index: 10000;
+        }
+    </style>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const dialog = document.getElementById("dialog");
@@ -309,6 +316,26 @@
         .user-button:hover .user-icon {
             color: #d1d5db;
         }
+
+        @media screen and (min-width: 1200px) {
+            table {
+                overflow: scroll;
+            }
+
+            .nav-link {
+                padding: 0 12px;
+            }
+
+            .dropdown-content {
+                width: 160px;
+            }
+
+            .dropdown-item {
+                padding: 8px 12px;
+            }
+
+        }
+
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -357,12 +384,12 @@
         </header>
 
         <div class="flex flex-col px-4 my-10 h-full">
-            <div class="flex">
+            <div class="sm:flex-col lg:flex-row flex">
                 <div class="flex-1 space-y-4">
                     <div class="flex justify-between items-center mb-4">
                         <h1 class="font-bold text-2xl text-[#354952]">Assessment</h1>
                         <button id="openDialogButton"
-                            class="bg-[#354952] text-white px-4 py-2 rounded-md flex items-center gap-2" type="button">
+                            class="bg-[#354952] text-white px-4 py-2 rounded-md flex items-center gap-2 text-center" type="button">
                             <i class="fas fa-plus-circle"></i>
                             <span>Add</span>
                         </button>
@@ -545,7 +572,6 @@
 
                 </div>
 
-                <!-- Add this next to your table container -->
                 <div class="w-96 border-l border-slate-200 bg-white mx-4">
                     <div class="p-4 border-b border-slate-200 flex justify-between items-center">
                         <h2 class="text-lg font-semibold">Trip Delta</h2>
