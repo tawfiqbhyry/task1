@@ -11,13 +11,7 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
-    <style>
-        #dialog {
-            margin-top: 0;
-            z-index: 10000;
-        }
-    </style>
-
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -179,8 +173,12 @@
                 display: flex;
             }
         }
+
+        #dialog {
+            margin-top: 0;
+            z-index: 10000;
+        }
     </style>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
@@ -334,7 +332,7 @@
         </header>
 
 
-        <div class="flex flex-col px-4 my-10 h-full">
+        <main class="flex flex-col px-4 my-10 h-full">
             <div class="sm:flex-col lg:flex-row flex" id="assess_container">
                 <div class="flex-1 space-y-4">
                     <div class="flex justify-between items-center mb-4">
@@ -635,8 +633,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </main>
     </div>
 
 
@@ -690,8 +687,6 @@
                 header.addEventListener('click', () => {
                     const tbody = document.querySelector('tbody');
                     const rows = Array.from(tbody.querySelectorAll('tr'));
-
-                    // Toggle sort direction
                     if (currentSort.column === index) {
                         currentSort.direction = currentSort.direction === 'ascending' ? 'descending' : 'ascending';
                     } else {
@@ -699,7 +694,6 @@
                         currentSort.direction = 'ascending';
                     }
 
-                    // Update sort icons
                     tableHeaders.forEach(h => {
                         const icon = h.querySelector('i');
                         icon.className = 'fas fa-chevron-up w-4 h-4 text-slate-300';
@@ -708,7 +702,6 @@
                     const currentIcon = header.querySelector('i');
                     currentIcon.className = `fas fa-chevron-${currentSort.direction === 'ascending' ? 'up' : 'down'} w-4 h-4`;
 
-                    // Sort rows
                     const sortedRows = rows.sort((a, b) => {
                         const aVal = a.children[index].textContent;
                         const bVal = b.children[index].textContent;
