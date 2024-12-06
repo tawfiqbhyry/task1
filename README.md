@@ -61,6 +61,9 @@ The project directory contains two main folders:
 - **Tailwind CSS** - A utility-first CSS framework used in both projects.
 - **HTML/CSS** - Static project implementation.
 
+## Node Version
+   - **Node v20.14.0**
+
 ## Contact
 
 If you have any questions or issues, contact us.
