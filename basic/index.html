@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const dialog = document.getElementById("dialog");
+            const openDialogButton = document.getElementById("openDialogButton");
+            const closeDialogButton = document.getElementById("closeDialogButton");
+            const closeDialogButton2 = document.getElementById("closeDialogButton2");
+            const form = document.getElementById("tripForm");
+
+            const tripData = {
+                title: "",
+                description: "",
+                travelers: [],
+            };
+
+            const data = [
+                { name: "Trip A", start: "2024-01-01", end: "2024-01-07", travelling: "5 People", status: "Active", issues: "" },
+                { name: "Trip B", start: "2024-02-10", end: "2024-02-15", travelling: "2 People", status: "Inactive", issues: "1 Issue" },
+            ];
+
+            openDialogButton.addEventListener("click", () => {
+                dialog.classList.remove("hidden");
+            });
+
+            closeDialogButton.addEventListener("click", () => {
+                dialog.classList.add("hidden");
+            });
+
+            closeDialogButton2.addEventListener("click", () => {
+                dialog.classList.add("hidden");
+            });
+
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+                dialog.classList.add("hidden");
+                console.log("Trip Data:", tripData);
+            });
+
+            document.getElementById("tripTitle").addEventListener("input", (e) => {
+                tripData.title = e.target.value;
+            });
+
+            document.getElementById("tripDescription").addEventListener("input", (e) => {
+                tripData.description = e.target.value;
+            });
+            let sortConfig = {
+                key: "name",
+                direction: "ascending",
+            };
+
+            const columns = [
+                {
+                    key: "name",
+                    label: "Name",
+                    visible: true,
+                },
+                {
+                    key: "start",
+                    label: "Start Date",
+                    visible: true,
+                    sortable: true,
+                },
+                {
+                    key: "end",
+                    label: "End Date",
+                    visible: true,
+                    sortable: true,
+                },
+                {
+                    key: "travelling",
+                    label: "Travelling",
+                    visible: true,
+                    sortable: true,
+                },
+                {
+                    key: "status",
+                    label: "Status",
+                    visible: true,
+                    sortable: true,
+                },
+                {
+                    key: "issues",
+                    label: "Issues",
+                    visible: true,
+                    sortable: true,
+                },
+
+            ];
+
+            const renderColumns = () => {
+                const columnContainer = document.getElementById("columnContainer");
+                columnContainer.innerHTML = "";
+                columns.forEach(column => {
+                    const button = document.createElement("button");
+                    button.textContent = column.label;
+                    button.className = `px-3 py-1 text-sm font-medium rounded-full border transition ${column.visible ? "bg-blue-100 text-blue-800 border-blue-200" : "bg-gray-100 text-gray-600 border-gray-200"}`;
+                    button.addEventListener("click", () => toggleColumn(column.key));
+                    columnContainer.appendChild(button);
+                });
+            };
+
+            const toggleColumn = (key) => {
+                const column = columns.find(col => col.key === key);
+                if (column) {
+                    column.visible = !column.visible;
+                    renderColumns();
+                }
+            };
+            renderColumns();
+        });
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .header {
+            width: 100%;
+            background-color: #354953;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-container {
+            padding: 12px 16px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .left-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background-color: #0d9488;
+            border-radius: 6px;
+        }
+
+        .logo {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            background-color: #475b64;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dropdown-button:hover {
+            color: #72d0d4;
+        }
+
+        .dropdown-button.active {
+            color: #72d0d4;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 8px;
+            width: 192px;
+            background-color: #1a1a1a;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-height: 240px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            width: 100%;
+            text-align: left;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dropdown-item:hover {
+            color: #72d0d4;
+            background-color: #2a2a2a;
+        }
+
+        .dropdown-item.active {
+            color: #72d0d4;
+            background-color: #2a2a2a;
+        }
+
+        .nav-link {
+            padding: 0 16px;
+            font-size: 14px;
+            font-weight: 500;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #72d0d4;
+        }
+
+        .nav-link.active {
+            color: #72d0d4;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #72d0d4;
+            transition: all 0.3s ease-out;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 9999px;
+            transition: all 0.2s;
+        }
+
+        .user-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-icon {
+            width: 24px;
+            height: 24px;
+            color: white;
+            transition: color 0.2s;
+        }
+
+        .user-button:hover .user-icon {
+            color: #d1d5db;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div class="bg-gray-100 min-h-screen">
+        <header class="header">
+            <div class="header-container">
+                <div class="left-nav">
+                    <div class="logo-container">
+                        <img src="./assets/react.svg" alt="Atlas Logo" class="logo">
+                    </div>
+                    <nav class="nav">
+                        <div class="dropdown">
+                            <button id="dropdownButton" class="dropdown-button">
+                                Remit Alpha
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
+                            </button>
+                            <div id="dropdownContent" class="dropdown-content">
+                                <button class="dropdown-item" data-path="#remit-alpha-1">Remit Option 1</button>
+                                <button class="dropdown-item" data-path="#remit-alpha-2">Remit Option 2</button>
+                                <button class="dropdown-item" data-path="#remit-alpha-3">Remit Option 3</button>
+                                <button class="dropdown-item" data-path="#remit-alpha-4">Remit Option 4</button>
+                                <button class="dropdown-item" data-path="#remit-alpha-5">Remit Option 5</button>
+                            </div>
+                        </div>
+                        <button class="nav-link" data-path="#control-centre">Control Centre</button>
+                        <button class="nav-link" data-path="#trips">Trips</button>
+                        <button class="nav-link" data-path="#insights">Insights</button>
+                        <button class="nav-link" data-path="#admin">Admin</button>
+                    </nav>
+                </div>
+                <div class="user-menu">
+                    <button class="user-button" title="User menu">
+                        <svg class="user-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                            <path d="M12 12a3 3 0 100-6 3 3 0 000 6z" />
+                            <path d="M21 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex flex-col px-4 my-10 h-full">
+            <div class="flex">
+                <div class="flex-1 space-y-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h1 class="font-bold text-2xl text-[#354952]">Assessment</h1>
+                        <button id="openDialogButton"
+                            class="bg-[#354952] text-white px-4 py-2 rounded-md flex items-center gap-2" type="button">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Add</span>
+                        </button>
+                    </div>
+
+                    <!-- Dialog -->
+                    <div id="dialog"
+                        class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                        <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="font-bold text-lg">New Trip</h2>
+                                <button id="closeDialogButton" class="text-gray-500 hover:text-gray-800" title="close"
+                                    type="button">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <form id="tripForm" class="space-y-4">
+                                <!-- Title and Description -->
+                                <div>
+                                    <label for="tripTitle" class="block font-medium">Overview</label>
+                                    <input id="tripTitle" type="text" class="w-full mt-2 p-2 border rounded-md"
+                                        placeholder="Trip to London Zoo and beyond" />
+                                    <textarea id="tripDescription" class="w-full mt-2 p-2 border rounded-md" rows="3"
+                                        placeholder="A big fun day out!"></textarea>
+                                </div>
+
+                                <!-- Travelers -->
+                                <div>
+                                    <label class="block font-medium">Who is travelling</label>
+                                    <div class="flex flex-wrap gap-2 mt-2">
+                                        <div
+                                            class="bg-green-100 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                                            Phillip Burn
+                                            <button type="button" class="text-red-500" title="Remove traveler">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                        <div
+                                            class="bg-green-100 px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                                            Tracker Delta
+                                            <button type="button" class="text-red-500" title="Remove traveler">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="flex justify-end gap-2 mt-4">
+                                    <button type="button" id="closeDialogButton2"
+                                        class="px-4 py-2 rounded-md border text-gray-700 hover:bg-gray-100">
+                                        Cancel
+                                    </button>
+                                    <button type="submit"
+                                        class="px-4 py-2 rounded-md bg-[#354952] text-white hover:bg-[#2a3b42]">
+                                        Add a journey
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4 p-4 bg-white rounded-lg shadow">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-400" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 10h2m4 0h13M9 6h11M4 6h2m2 8h10m4 0h2M3 14h2m4 4h13M9 18h11M4 18h2" />
+                        </svg>
+                        <div id="columnContainer" class="flex flex-wrap gap-2"></div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow mt-4">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200">
+                                        <th
+                                            class="px-4 py-3 text-left text-sm font-medium text-slate-700 cursor-pointer hover:bg-slate-100">
+                                            <div class="flex items-center gap-2">
+                                                <span>Name</span>
+                                                <div class="flex flex-col">
+                                                    <i class="fas fa-chevron-up w-4 h-4 text-slate-300"></i>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <th
+                                            class="px-4 py-3 text-left text-sm font-medium text-slate-700 cursor-pointer hover:bg-slate-100">
+                                            <div class="flex items-center gap-2">
+                                                <span>Start Date</span>
+                                                <div class="flex flex-col">
+                                                    <i class="fas fa-chevron-up w-4 h-4 text-slate-300"></i>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <th
+                                            class="px-4 py-3 text-left text-sm font-medium text-slate-700 cursor-pointer hover:bg-slate-100">
+                                            <div class="flex items-center gap-2">
+                                                <span>End Date</span>
+                                                <div class="flex flex-col">
+                                                    <i class="fas fa-chevron-up w-4 h-4 text-slate-300"></i>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <th
+                                            class="px-4 py-3 text-left text-sm font-medium text-slate-700 cursor-pointer hover:bg-slate-100">
+                                            <div class="flex items-center gap-2">
+                                                <span>Travelling</span>
+                                                <div class="flex flex-col">
+                                                    <i class="fas fa-chevron-up w-4 h-4 text-slate-300"></i>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <th
+                                            class="px-4 py-3 text-left text-sm font-medium text-slate-700 cursor-pointer hover:bg-slate-100">
+                                            <div class="flex items-center gap-2">
+                                                <span>Status</span>
+                                                <div class="flex flex-col">
+                                                    <i class="fas fa-chevron-up w-4 h-4 text-slate-300"></i>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <th
+                                            class="px-4 py-3 text-left text-sm font-medium text-slate-700 cursor-pointer hover:bg-slate-100">
+                                            <div class="flex items-center gap-2">
+                                                <span>Issues</span>
+                                                <div class="flex flex-col">
+                                                    <i class="fas fa-chevron-up w-4 h-4 text-slate-300"></i>
+                                                </div>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        class="border-b border-slate-100 last:border-none hover:bg-slate-50 cursor-pointer">
+                                        <td class="px-4 py-3 text-sm text-slate-600">Trip A</td>
+                                        <td class="px-4 py-3 text-sm text-slate-600">2024-01-01</td>
+                                        <td class="px-4 py-3 text-sm text-slate-600">2024-01-07</td>
+                                        <td class="px-4 py-3 text-sm text-slate-600">5 People</td>
+                                        <td class="px-4 py-3 text-sm text-slate-600">Active</td>
+                                        <td class="px-4 py-3 text-sm text-slate-600"></td>
+                                    </tr>
+                                    <tr
+                                        class="border-b border-slate-100 last:border-none hover:bg-slate-50 cursor-pointer">
+                                        <td class="px-4 py-3 text-sm text-slate-600">Trip B</td>
+                                        <td class="px-4 py-3 text-sm text-slate-600">2024-02-10</td>
+                                        <td class="px-4 py-3 text-sm text-slate-600">2024-02-15</td>
+                                        <td class="px-4 py-3 text-sm text-slate-600">2 People</td>
+                                        <td class="px-4 py-3 text-sm text-slate-600">Inactive</td>
+                                        <td class="px-4 py-3 text-sm text-slate-600">1 Issue</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="flex items-center justify-between px-4 py-3 border-t border-slate-200">
+                            <div class="flex items-center gap-2 text-sm text-slate-600">
+                                <span>Items per page:</span>
+                                <select class="border rounded-md px-2 py-1" title="select">
+                                    <option>5</option>
+                                    <option>10</option>
+                                    <option>25</option>
+                                    <option>50</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="text-sm text-slate-600">1-5 of 500</span>
+                                <div class="flex gap-1">
+                                    <button class="p-1 rounded hover:bg-slate-100" title="previous">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <button class="p-1 rounded hover:bg-slate-100" title="next">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Add this next to your table container -->
+                <div class="w-96 border-l border-slate-200 bg-white mx-4">
+                    <div class="p-4 border-b border-slate-200 flex justify-between items-center">
+                        <h2 class="text-lg font-semibold">Trip Delta</h2>
+                        <button class="text-slate-400 hover:text-slate-600" title="close">
+                            <i class="fas fa-times w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <div class="p-4">
+                        <p class="text-sm text-slate-600 mb-4">
+                            Here is the description of the trip, wherever this comes from. It may be optional!
+                        </p>
+
+                        <div class="h-48 rounded-lg mb-4 overflow-hidden">
+                            <div id="map" class="w-full h-full"></div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <h3 class="font-medium mb-2">Travelling</h3>
+                                <div class="space-y-2">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-users w-4 h-4 text-slate-400"></i>
+                                        <span class="text-sm">Phillip Burn</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-users w-4 h-4 text-slate-400"></i>
+                                        <span class="text-sm">Group Bravo</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-users w-4 h-4 text-slate-400"></i>
+                                        <span class="text-sm">Tracker Delta</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-users w-4 h-4 text-slate-400"></i>
+                                        <span class="text-sm">Vehicle Charlie</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="font-medium mb-2">Breakdown</h3>
+                                <div class="space-y-6">
+                                    <div class="relative pl-6 border-l-2 border-slate-200">
+                                        <div class="absolute -left-2 top-0">
+                                            <div
+                                                class="w-7 h-7 rounded-full bg-white border-2 border-blue-500 flex items-center justify-center">
+                                                A
+                                            </div>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-map-pin w-4 h-4 text-slate-400"></i>
+                                                <span class="text-sm">Brixton station, London</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative pl-6 border-l-2 border-slate-200">
+                                        <div class="absolute -left-2 top-0">
+                                            <div
+                                                class="w-7 h-7 rounded-full bg-white border-2 border-blue-500 flex items-center justify-center">
+                                                B
+                                            </div>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-map-pin w-4 h-4 text-slate-400"></i>
+                                                <span class="text-sm">Battersea park hotel, London</span>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-clock w-4 h-4 text-slate-400"></i>
+                                                <span class="text-sm">Today, 08:30</span>
+                                            </div>
+                                            <div class="text-sm text-slate-500">By car</div>
+                                            <div class="text-sm text-slate-500">0 of 2 arrived</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="relative pl-6">
+                                        <div class="absolute -left-2 top-0">
+                                            <div
+                                                class="w-7 h-7 rounded-full bg-white border-2 border-blue-500 flex items-center justify-center">
+                                                C
+                                            </div>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center gap-2">
+                                                    <i class="fas fa-users w-4 h-4 text-slate-400"></i>
+                                                    <span class="text-sm">Phillip Burn is overdue</span>
+                                                </div>
+                                                <button class="text-slate-400 hover:text-slate-600" title="phili">
+                                                    <i class="fas fa-ellipsis-v w-4 h-4"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <button class="w-full py-2 text-center text-blue-600 hover:bg-blue-50 rounded-md border-2">
+                                Open Dashboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        let currentPath = '#remit-alpha-1';
+        const dropdownButton = document.getElementById('dropdownButton');
+        const dropdownContent = document.getElementById('dropdownContent');
+
+        dropdownButton.addEventListener('click', () => {
+            dropdownContent.classList.toggle('show');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!dropdownButton.contains(e.target)) {
+                dropdownContent.classList.remove('show');
+            }
+        });
+
+        function handleNavigate(path) {
+            currentPath = path;
+            updateActiveStates();
+            dropdownContent.classList.remove('show');
+        }
+
+        function updateActiveStates() {
+            dropdownButton.classList.toggle('active', currentPath.startsWith('#remit-alpha'));
+            document.querySelectorAll('.dropdown-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.path === currentPath);
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.toggle('active', link.dataset.path === currentPath);
+            });
+        }
+
+        document.querySelectorAll('.dropdown-item, .nav-link').forEach(element => {
+            element.addEventListener('click', () => handleNavigate(element.dataset.path));
+        });
+        updateActiveStates();
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Table sorting functionality
+            const tableHeaders = document.querySelectorAll('th');
+            let currentSort = {
+                column: null,
+                direction: 'ascending'
+            };
+
+            tableHeaders.forEach((header, index) => {
+                header.addEventListener('click', () => {
+                    const tbody = document.querySelector('tbody');
+                    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+                    // Toggle sort direction
+                    if (currentSort.column === index) {
+                        currentSort.direction = currentSort.direction === 'ascending' ? 'descending' : 'ascending';
+                    } else {
+                        currentSort.column = index;
+                        currentSort.direction = 'ascending';
+                    }
+
+                    // Update sort icons
+                    tableHeaders.forEach(h => {
+                        const icon = h.querySelector('i');
+                        icon.className = 'fas fa-chevron-up w-4 h-4 text-slate-300';
+                    });
+
+                    const currentIcon = header.querySelector('i');
+                    currentIcon.className = `fas fa-chevron-${currentSort.direction === 'ascending' ? 'up' : 'down'} w-4 h-4`;
+
+                    // Sort rows
+                    const sortedRows = rows.sort((a, b) => {
+                        const aVal = a.children[index].textContent;
+                        const bVal = b.children[index].textContent;
+                        return currentSort.direction === 'ascending'
+                            ? aVal.localeCompare(bVal)
+                            : bVal.localeCompare(aVal);
+                    });
+
+                    tbody.innerHTML = '';
+                    sortedRows.forEach(row => tbody.appendChild(row));
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const map = L.map('map').setView([51.5074, -0.1278], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            const marker = L.marker([51.5074, -0.1278]).addTo(map);
+            marker.bindPopup('A location in London');
+
+            const closeButton = document.querySelector('[title="close"]');
+            if (closeButton) {
+                closeButton.addEventListener('click', function () {
+                    console.log('Close button clicked');
+                });
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>
