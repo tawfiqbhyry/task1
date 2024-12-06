@@ -20,6 +20,39 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const desktopDropdown = document.getElementById('desktopDropdown');
+            const desktopDropdownMenu = document.getElementById('desktopDropdownMenu');
+
+            desktopDropdown.addEventListener('click', (e) => {
+                e.stopPropagation();
+                desktopDropdownMenu.classList.toggle('hidden');
+            });
+
+            const mobileDropdown = document.getElementById('mobileDropdown');
+            const mobileDropdownMenu = document.getElementById('mobileDropdownMenu');
+
+            mobileDropdown.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mobileDropdownMenu.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', () => {
+                desktopDropdownMenu.classList.add('hidden');
+                mobileDropdownMenu.classList.add('hidden');
+            });
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) { // md breakpoint
+                    mobileMenu.classList.add('hidden');
+                }
+            });
             const dialog = document.getElementById("dialog");
             const openDialogButton = document.getElementById("openDialogButton");
             const closeDialogButton = document.getElementById("closeDialogButton");
@@ -140,256 +173,175 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        .header {
-            width: 100%;
-            background-color: #354953;
-            border-bottom: 1px solid #e5e7eb;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .header-container {
-            padding: 12px 16px;
-            width: 100%;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .left-nav {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            background-color: #0d9488;
-            border-radius: 6px;
-        }
-
-        .logo {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
-        }
-
-        .nav {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            background-color: #475b64;
-            border: none;
-            border-radius: 6px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .dropdown-button:hover {
-            color: #72d0d4;
-        }
-
-        .dropdown-button.active {
-            color: #72d0d4;
-        }
-
-        .dropdown-content {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            margin-top: 8px;
-            width: 192px;
-            background-color: #1a1a1a;
-            border-radius: 6px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-height: 240px;
-            overflow-y: auto;
-            display: none;
-        }
-
-        .dropdown-content.show {
-            display: block;
-        }
-
-        .dropdown-item {
-            width: 100%;
-            text-align: left;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .dropdown-item:hover {
-            color: #72d0d4;
-            background-color: #2a2a2a;
-        }
-
-        .dropdown-item.active {
-            color: #72d0d4;
-            background-color: #2a2a2a;
-        }
-
-        .nav-link {
-            padding: 0 16px;
-            font-size: 14px;
-            font-weight: 500;
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .nav-link:hover {
-            color: #72d0d4;
-        }
-
-        .nav-link.active {
-            color: #72d0d4;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: #72d0d4;
-            transition: all 0.3s ease-out;
-        }
-
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            width: 100%;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 9999px;
-            transition: all 0.2s;
-        }
-
-        .user-button:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .user-icon {
-            width: 24px;
-            height: 24px;
-            color: white;
-            transition: color 0.2s;
-        }
-
-        .user-button:hover .user-icon {
-            color: #d1d5db;
-        }
-
-        @media screen and (min-width: 1200px) {
-            table {
-                overflow: scroll;
+        @media screen and (max-width: 640px) {
+            #assess_container {
+                flex-direction: column !important;
+                display: flex;
             }
-
-            .nav-link {
-                padding: 0 12px;
-            }
-
-            .dropdown-content {
-                width: 160px;
-            }
-
-            .dropdown-item {
-                padding: 8px 12px;
-            }
-
         }
-
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
     <div class="bg-gray-100 min-h-screen">
-        <header class="header">
-            <div class="header-container">
-                <div class="left-nav">
-                    <div class="logo-container">
-                        <img src="./assets/react.svg" alt="Atlas Logo" class="logo">
-                    </div>
-                    <nav class="nav">
-                        <div class="dropdown">
-                            <button id="dropdownButton" class="dropdown-button">
-                                Remit Alpha
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M6 9l6 6 6-6" />
-                                </svg>
-                            </button>
-                            <div id="dropdownContent" class="dropdown-content">
-                                <button class="dropdown-item" data-path="#remit-alpha-1">Remit Option 1</button>
-                                <button class="dropdown-item" data-path="#remit-alpha-2">Remit Option 2</button>
-                                <button class="dropdown-item" data-path="#remit-alpha-3">Remit Option 3</button>
-                                <button class="dropdown-item" data-path="#remit-alpha-4">Remit Option 4</button>
-                                <button class="dropdown-item" data-path="#remit-alpha-5">Remit Option 5</button>
+        <header class="bg-[#354953] border-b border-gray-200 shadow-sm">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <!-- Left side -->
+                    <div class="flex items-center">
+                        <!-- Logo -->
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-[#0d9488] rounded-md flex items-center justify-center">
+                                <img src="./assets/react.svg" alt="Logo" class="w-6 h-6">
                             </div>
                         </div>
-                        <button class="nav-link" data-path="#control-centre">Control Centre</button>
-                        <button class="nav-link" data-path="#trips">Trips</button>
-                        <button class="nav-link" data-path="#insights">Insights</button>
-                        <button class="nav-link" data-path="#admin">Admin</button>
-                    </nav>
+
+                        <!-- Desktop Navigation -->
+                        <nav class="hidden md:ml-6 md:flex md:space-x-4">
+                            <!-- Dropdown -->
+                            <div class="relative" id="desktopDropdown">
+                                <button
+                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[#475b64] rounded-md hover:text-[#72d0d4] focus:outline-none">
+                                    <span>Remit Alpha</span>
+                                    <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                <div class="hidden absolute z-50 mt-2 w-48 rounded-md shadow-lg bg-[#1a1a1a] ring-1 ring-black ring-opacity-5"
+                                    role="menu" id="desktopDropdownMenu">
+                                    <div class="py-1" role="none">
+                                        <a href="#" role="menuitem"
+                                            class="block px-4 py-2 text-sm text-white hover:bg-[#2a2a2a] hover:text-[#72d0d4]">Remit
+                                            Option 1</a>
+                                        <a href="#" role="menuitem"
+                                            class="block px-4 py-2 text-sm text-white hover:bg-[#2a2a2a] hover:text-[#72d0d4]">Remit
+                                            Option 2</a>
+                                        <a href="#" role="menuitem"
+                                            class="block px-4 py-2 text-sm text-white hover:bg-[#2a2a2a] hover:text-[#72d0d4]">Remit
+                                            Option 3</a>
+                                        <a href="#" role="menuitem"
+                                            class="block px-4 py-2 text-sm text-white hover:bg-[#2a2a2a] hover:text-[#72d0d4]">Remit
+                                            Option 4</a>
+                                        <a href="#" role="menuitem"
+                                            class="block px-4 py-2 text-sm text-white hover:bg-[#2a2a2a] hover:text-[#72d0d4]">Remit
+                                            Option 5</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Navigation Links -->
+                            <a href="#"
+                                class="px-3 py-2 text-sm font-medium text-white hover:text-[#72d0d4] relative group">
+                                Control Centre
+                                <span
+                                    class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#72d0d4] transition-all group-hover:w-full"></span>
+                            </a>
+                            <a href="#"
+                                class="px-3 py-2 text-sm font-medium text-white hover:text-[#72d0d4] relative group">
+                                Trips
+                                <span
+                                    class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#72d0d4] transition-all group-hover:w-full"></span>
+                            </a>
+                            <a href="#"
+                                class="px-3 py-2 text-sm font-medium text-white hover:text-[#72d0d4] relative group">
+                                Insights
+                                <span
+                                    class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#72d0d4] transition-all group-hover:w-full"></span>
+                            </a>
+                            <a href="#"
+                                class="px-3 py-2 text-sm font-medium text-white hover:text-[#72d0d4] relative group">
+                                Admin
+                                <span
+                                    class="absolute bottom-0 left-0 w-0 h-0.5 bg-[#72d0d4] transition-all group-hover:w-full"></span>
+                            </a>
+                        </nav>
+                    </div>
+
+                    <!-- Right side -->
+                    <div class="flex items-center">
+                        <!-- User menu -->
+                        <div class="ml-3 relative">
+                            <button class="p-1 rounded-full text-white hover:bg-[#475b64] focus:outline-none"
+                                title="menu">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 2a10 10 0 100 20 10 10 0 000-20zM12 12a3 3 0 100-6 3 3 0 000 6zM21 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Mobile menu button -->
+                        <div class="flex md:hidden ml-3">
+                            <button type="button"
+                                class="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-[#475b64] focus:outline-none"
+                                id="mobileMenuBtn" title="mobileMenuBTN">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="user-menu">
-                    <button class="user-button" title="User menu">
-                        <svg class="user-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
-                            <path d="M12 12a3 3 0 100-6 3 3 0 000 6z" />
-                            <path d="M21 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2" />
-                        </svg>
-                    </button>
+
+                <!-- Mobile menu -->
+                <div class="hidden md:hidden" id="mobileMenu">
+                    <div class="px-2 pt-2 pb-3 space-y-1">
+                        <div class="relative" id="mobileDropdown">
+                            <button
+                                class="w-full text-left px-3 py-2 text-sm font-medium text-white bg-[#475b64] rounded-md hover:text-[#72d0d4] focus:outline-none flex justify-between items-center">
+                                <span>Remit Alpha</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div class="hidden absolute z-50 mt-2 w-full rounded-md shadow-lg bg-[#1a1a1a] ring-1 ring-black ring-opacity-5"
+                                id="mobileDropdownMenu">
+                                <div class="py-1">
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-white hover:bg-[#2a2a2a] hover:text-[#72d0d4]">Remit
+                                        Option 1</a>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-white hover:bg-[#2a2a2a] hover:text-[#72d0d4]">Remit
+                                        Option 2</a>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-white hover:bg-[#2a2a2a] hover:text-[#72d0d4]">Remit
+                                        Option 3</a>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-white hover:bg-[#2a2a2a] hover:text-[#72d0d4]">Remit
+                                        Option 4</a>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-sm text-white hover:bg-[#2a2a2a] hover:text-[#72d0d4]">Remit
+                                        Option 5</a>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#"
+                            class="block px-3 py-2 rounded-md text-sm font-medium text-white hover:text-[#72d0d4]">Control
+                            Centre</a>
+                        <a href="#"
+                            class="block px-3 py-2 rounded-md text-sm font-medium text-white hover:text-[#72d0d4]">Trips</a>
+                        <a href="#"
+                            class="block px-3 py-2 rounded-md text-sm font-medium text-white hover:text-[#72d0d4]">Insights</a>
+                        <a href="#"
+                            class="block px-3 py-2 rounded-md text-sm font-medium text-white hover:text-[#72d0d4]">Admin</a>
+                    </div>
                 </div>
             </div>
         </header>
 
+
         <div class="flex flex-col px-4 my-10 h-full">
-            <div class="sm:flex-col lg:flex-row flex">
+            <div class="sm:flex-col lg:flex-row flex" id="assess_container">
                 <div class="flex-1 space-y-4">
                     <div class="flex justify-between items-center mb-4">
                         <h1 class="font-bold text-2xl text-[#354952]">Assessment</h1>
                         <button id="openDialogButton"
-                            class="bg-[#354952] text-white px-4 py-2 rounded-md flex items-center gap-2 text-center" type="button">
+                            class="bg-[#354952] text-white px-4 py-2 rounded-md flex items-center gap-2 text-center"
+                            type="button">
                             <i class="fas fa-plus-circle"></i>
                             <span>Add</span>
                         </button>
@@ -572,7 +524,8 @@
 
                 </div>
 
-                <div class="w-96 border-l border-slate-200 bg-white mx-4">
+                <!-- Replace the existing Trip Delta section with this code -->
+                <div class="lg:w-96 sm:w-full border-l border-slate-200 bg-white lg:ml-4 sm:mt-8 lg:mt-0">
                     <div class="p-4 border-b border-slate-200 flex justify-between items-center">
                         <h2 class="text-lg font-semibold">Trip Delta</h2>
                         <button class="text-slate-400 hover:text-slate-600" title="close">
@@ -580,7 +533,7 @@
                         </button>
                     </div>
 
-                    <div class="p-4">
+                    <div class="p-4 flex flex-col">
                         <p class="text-sm text-slate-600 mb-4">
                             Here is the description of the trip, wherever this comes from. It may be optional!
                         </p>
@@ -589,7 +542,7 @@
                             <div id="map" class="w-full h-full"></div>
                         </div>
 
-                        <div class="space-y-4">
+                        <div class="space-y-4 w-full">
                             <div>
                                 <h3 class="font-medium mb-2">Travelling</h3>
                                 <div class="space-y-2">
@@ -612,7 +565,7 @@
                                 </div>
                             </div>
 
-                            <div>
+                            <div class="w-full">
                                 <h3 class="font-medium mb-2">Breakdown</h3>
                                 <div class="space-y-6">
                                     <div class="relative pl-6 border-l-2 border-slate-200">
@@ -674,7 +627,7 @@
                             </div>
                         </div>
 
-                        <div class="mt-6">
+                        <div class="mt-6 w-full">
                             <button class="w-full py-2 text-center text-blue-600 hover:bg-blue-50 rounded-md border-2">
                                 Open Dashboard
                             </button>
@@ -683,6 +636,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
 
