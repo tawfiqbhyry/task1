@@ -59,9 +59,10 @@ This project is a responsive web application built with HTML, JavaScript, and Ta
 
 The project follows a simple structure:
 
-- `assets/`: Contains static resources
-  - `main.js`: Handles all JavaScript functionality including map integration, navigation, and event handling
-  - `logo.svg`: Application branding logo
-- `index.html`: Main application file containing the dashboard interface
+- `basic/`: Contains all project files
+  - `assets/`: Contains static resources
+    - `main.js`: Handles all JavaScript functionality including map integration, navigation, and event handling
+    - `logo.svg`: Application branding logo
+  - `index.html`: Main application file containing the dashboard interface
 
-- `README.md`: Project documentation and setup instructions
+  - `README.md`: Project documentation and setup instructions
